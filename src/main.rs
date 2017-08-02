@@ -32,6 +32,19 @@ fn count_neighbors(board: &Vec<Vec<bool>>, cell_y: i32, cell_x: i32) -> i32 {
     count
 }
 
+fn new_state(current_state: bool, neighbor_count: i32) -> bool {
+    if current_state {
+        if neighbor_count == 2 || neighbor_count == 3 {
+            return true;
+        }
+        return false;
+    }
+    if neighbor_count == 3 {
+        return true;
+    }
+    return false;
+}
+
 fn main() {
     let board: Vec<Vec<bool>> = vec![vec![true; 20]; 20];
 }
@@ -96,5 +109,24 @@ mod tests {
         let board: Vec<Vec<bool>> = make_alive_board();
         let result: i32 = count_neighbors(&board, 19, 19);
         assert_eq!(3, result);
+    }
+    #[test]
+    fn new_state_alive_cell_dies() {
+        assert_eq!(false, new_state(true, 1));
+        assert_eq!(false, new_state(true, 4));
+    }
+    #[test]
+    fn new_state_alive_cell_lives() {
+        assert_eq!(true, new_state(true, 2));
+        assert_eq!(true, new_state(true, 3));
+    }
+    #[test]
+    fn new_state_dead_cell_stays_dead() {
+        assert_eq!(false, new_state(false, 0));
+        assert_eq!(false, new_state(false, 2));
+    }
+    #[test]
+    fn new_state_dead_cell_revives() {
+        assert_eq!(true, new_state(false, 3));
     }
 }
