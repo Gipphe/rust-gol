@@ -1,3 +1,5 @@
+use std::{thread, time};
+
 fn count_neighbors(board: &Vec<Vec<bool>>, cell_y: i32, cell_x: i32) -> i32 {
     let mut count = 0;
     for y in -1..2 {
@@ -15,9 +17,7 @@ fn count_neighbors(board: &Vec<Vec<bool>>, cell_y: i32, cell_x: i32) -> i32 {
                     let neighbor: Option<&bool> = row.get(real_x);
 
                     match neighbor {
-                        None => {
-                            ()
-                        },
+                        None => {()},
                         Some(neighbor) => {
                             if *neighbor {
                                 count += 1;
@@ -62,7 +62,14 @@ fn new_state(current_state: bool, neighbor_count: i32) -> bool {
 }
 
 fn main() {
-    let board: Vec<Vec<bool>> = vec![vec![true; 20]; 20];
+    let delay: time::Duration = time::Duration::from_millis(500);
+    let mut board: Vec<Vec<bool>> = vec![vec![true; 20]; 20];
+    loop {
+        thread::sleep(delay);
+        board = step(&board);
+        println!("\n");
+        println!("{:?}", board);
+    }
 }
 
 #[cfg(test)]
