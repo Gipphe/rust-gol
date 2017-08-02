@@ -31,6 +31,22 @@ fn count_neighbors(board: &Vec<Vec<bool>>, cell_y: i32, cell_x: i32) -> i32 {
     }
     count
 }
+fn step(old_gen: &Vec<Vec<bool>>) -> Vec<Vec<bool>> {
+    let mut next_gen: Vec<Vec<bool>> = old_gen.clone();
+    for y in 0..old_gen.len() {
+        let row: &Vec<bool> = &old_gen[y];
+        for x in 0..row.len() {
+            let cell: bool = row[x];
+
+            let neighbors: i32 = count_neighbors(&old_gen, y as i32, x as i32);
+            let is_alive: bool = new_state(cell, neighbors);
+
+            next_gen[y][x] = is_alive;
+        }
+    }
+
+    next_gen
+}
 
 fn new_state(current_state: bool, neighbor_count: i32) -> bool {
     if current_state {
@@ -128,5 +144,21 @@ mod tests {
     #[test]
     fn new_state_dead_cell_revives() {
         assert_eq!(true, new_state(false, 3));
+    }
+    #[test]
+    fn step_iterates_the_board() {
+        let board: Vec<Vec<bool>> = vec![
+            vec![false, false, false, false],
+            vec![true, true, false, false],
+            vec![false, true, false, false],
+            vec![false, false, false, false]
+        ];
+        let next_gen: Vec<Vec<bool>> = step(&board);
+
+        assert_eq!(true, next_gen[1][1]);
+        assert_eq!(false, next_gen[0][1]);
+        assert_eq!(true, next_gen[1][0]);
+        assert_eq!(true, next_gen[2][0]);
+        assert_eq!(false, next_gen[1][2]);
     }
 }
