@@ -1,8 +1,10 @@
+#[cfg(all(feature="winit", feature="glium"))] #[macro_use] extern crate conrod;
+
 mod view;
 mod model;
 
 use std::{thread, time};
-use view::display;
+use view::main as display;
 use model::{step};
 
 fn main() {
@@ -17,7 +19,7 @@ fn main() {
 		vec![false, false, false, false, false, false, false],
 	];
 	loop {
-		display(&board);
+		display();
 		thread::sleep(delay);
 		board = step(&board);
 	}
