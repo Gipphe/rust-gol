@@ -1,22 +1,13 @@
-#![feature(core)]
-
-extern crate rustbox;
-
-use std::error::Error;
-use std::default::Default;
-
-use rustbox::{Color, RustBox};
-use rustbox::Key;
+extern crate piston_window;
 
 mod view;
 mod model;
 
 use std::{thread, time};
-use view;
 use model::{step};
 
 fn main() {
-	view::init();
+	let drawWindow = view::new();
 	let delay: time::Duration = time::Duration::from_secs(1);
 	let mut board = vec![
 		vec![false, true, false, false, false, false, false],
@@ -28,7 +19,7 @@ fn main() {
 		vec![false, false, false, false, false, false, false],
 	];
 	loop {
-		view::poll_events();
+		drawWindow();
 		thread::sleep(delay);
 		board = step(&board);
 	}

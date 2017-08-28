@@ -4,4 +4,4 @@ name = "rust-gol"
 version = "0.1.0"
 
 [dependencies]
-rustbox = "*"
+piston_window = "0.61.0"

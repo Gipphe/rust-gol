@@ -1,23 +1,20 @@
-let mut rustbox;
-pub fn init() {
-	rustbox = match RustBox::init(Default::default()) {
-		Result::Ok(v) => v,
-		Result::Err(e) => panic!("{}", e),
-	};
-	rustbox.print(1, 1, rustbox::RB_BOLD, Color::White, Color::Black, "Hello world");
-	rustbox.print(1, 3, rustbox::RB_BOLD, Color::White, Color::Black, "Press 'q' to quit");
-	rustbox.present();
-}
-pub fn poll_events() {
-	match rustbox.poll_events(false) {
-		Ok(rustbox::Event::KeyEvent(key)) => {
-			match key {
-				Key::Char('q') => { break; },
-				_ => (),
-			}
-		},
-		Err(e) => panic!("{}", e.description()),
-		_ => ()
-	}
-}
+use std::sync::{Arc, Mutex};
+use piston_window::*;
 
+pub fn new() -> Box<Fn()> {
+    let mut window: Arc<Mutex<PistonWindow>> = Arc::new(Mutex::new(
+        WindowSettings::new("Hello Piston!", [640, 480])
+        .exit_on_esc(true).build().unwrap()));
+
+	Box::new(move || {
+		while let Some(event) = window.next() {
+			window.draw_2d(&event, |context, graphics| {
+				clear([1.0; 4], graphics);
+				rectangle([1.0, 0.0, 0.0, 1.0], // red
+						[0.0, 0.0, 100.0, 100.0],
+						context.transform,
+						graphics);
+			});
+		}
+	})
+}
