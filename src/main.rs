@@ -1,13 +1,22 @@
-#[cfg(all(feature="winit", feature="glium"))] #[macro_use] extern crate conrod;
+#![feature(core)]
+
+extern crate rustbox;
+
+use std::error::Error;
+use std::default::Default;
+
+use rustbox::{Color, RustBox};
+use rustbox::Key;
 
 mod view;
 mod model;
 
 use std::{thread, time};
-use view::main as display;
+use view;
 use model::{step};
 
 fn main() {
+	view::init();
 	let delay: time::Duration = time::Duration::from_secs(1);
 	let mut board = vec![
 		vec![false, true, false, false, false, false, false],
@@ -19,7 +28,7 @@ fn main() {
 		vec![false, false, false, false, false, false, false],
 	];
 	loop {
-		display();
+		view::poll_events();
 		thread::sleep(delay);
 		board = step(&board);
 	}

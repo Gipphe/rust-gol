@@ -4,9 +4,4 @@ name = "rust-gol"
 version = "0.1.0"
 
 [dependencies]
-glium = "0.17"
-winit = "0.7"
-conrod = "0.54.0"
-
-[features]
-default = ["winit", "glium"]
+rustbox = "*"
